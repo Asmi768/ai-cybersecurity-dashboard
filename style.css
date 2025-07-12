@@ -1,0 +1,112 @@
+body {
+    font-family: 'Times New Roman', Times, serif;
+    background: linear-gradient(135deg, #f8f6f1 0%, #f3efe2 100%);
+    color: #2d1c0b;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 820px;
+    margin: 2rem auto;
+    padding: 2.5rem 2rem;
+    background: linear-gradient(120deg, #fffdfa 80%, #f5ecd7 100%);
+    border-radius: 16px;
+    box-shadow: 0 6px 24px rgba(80,60,30,0.13);
+    border: 1.5px solid #c2b280;
+    position: relative;
+    transition: box-shadow 0.3s;
+}
+.container:hover {
+    box-shadow: 0 12px 32px rgba(80,60,30,0.18);
+}
+
+h1, h2, h3 {
+    text-align: center;
+    font-weight: bold;
+    color: #6b4f1d;
+    margin-bottom: 1rem;
+    text-shadow: 0 2px 6px #e5d8b0, 0 1px 0 #fffdfa;
+    font-family: 'Georgia', serif;
+    letter-spacing: 1px;
+}
+
+h1 {
+    font-size: 2.5rem;
+    margin-top: 0;
+    animation: fadeInDown 1s;
+}
+
+h2 {
+    font-size: 1.7rem;
+}
+
+h3 {
+    font-size: 1.25rem;
+}
+
+@keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-30px);}
+    to { opacity: 1; transform: translateY(0);}
+}
+
+.score {
+    margin: 1.5rem 0;
+    font-size: 1.7rem;
+    text-align: center;
+    color: #a67c00;
+    background: linear-gradient(90deg, #f5ecd7 70%, #fffdfa 100%);
+    border-radius: 10px;
+    padding: 1rem 0;
+    box-shadow: 0 2px 8px rgba(166,124,0,0.07);
+    border: 1.5px solid #d6c08d;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+#chart_div {
+    width: 100%;
+    height: 340px;
+    margin: 1.5rem 0;
+    border-radius: 10px;
+    background: linear-gradient(120deg, #f3efe2 80%, #fffdfa 100%);
+    box-shadow: 0 2px 8px rgba(80,60,30,0.09);
+    padding: 1.2rem;
+    border: 1.5px solid #c2b280;
+    position: relative;
+    overflow: hidden;
+    transition: box-shadow 0.3s;
+}
+#chart_div:hover {
+    box-shadow: 0 6px 18px rgba(80,60,30,0.15);
+}
+
+.logs ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.logs li {
+    background: linear-gradient(90deg, #f7f2e7 80%, #ede3c7 100%);
+    margin: 0.7rem 0;
+    padding: 1.1rem 1.5rem;
+    border-radius: 8px;
+    color: #4b3a1a;
+    box-shadow: 0 1px 4px rgba(166,124,0,0.06);
+    border: 1.5px solid #d6c08d;
+    transition: background 0.25s, color 0.25s, transform 0.18s;
+    position: relative;
+    cursor: pointer;
+    font-size: 1.08rem;
+}
+
+.logs li:hover {
+    background: linear-gradient(90deg, #ede3c7 70%, #fffdfa 100%);
+    color: #6b4f1d;
+    border-color: #bfa76a;
+    z-index: 2;
+    transform: scale(1.025);
+    box-shadow: 0 4px 16px rgba(191,167,106,0.13);
+}
