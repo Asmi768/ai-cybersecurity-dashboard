@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-Powered Cybersecurity Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <style>
+        body {
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            color: #f4f6fb;
+            background: linear-gradient(135deg, #1a2980 0%, #26d0ce 100%);
+            overflow-x: hidden;
+        }
+        /* Animated background bubbles */
+        .bubble {
+            position: fixed;
+            border-radius: 50%;
+            opacity: 0.18;
+            z-index: 0;
+            animation: floatBubble 18s infinite linear;
+            pointer-events: none;
+        }
+        .bubble1 { width: 180px; height: 180px; left: 5vw; top: 10vh; background: #fff; animation-delay: 0s;}
+        .bubble2 { width: 120px; height: 120px; right: 10vw; top: 30vh; background: #26d0ce; animation-delay: 3s;}
+        .bubble3 { width: 90px; height: 90px; left: 30vw; bottom: 10vh; background: #1a2980; animation-delay: 6s;}
+        .bubble4 { width: 140px; height: 140px; right: 20vw; bottom: 5vh; background: #fff; animation-delay: 9s;}
+        @keyframes floatBubble {
+            0% { transform: translateY(0) scale(1);}
+            50% { transform: translateY(-40px) scale(1.1);}
+            100% { transform: translateY(0) scale(1);}
+        }
+        .container {
+            max-width: 900px;
+            margin: 48px auto;
+            background: rgba(30, 36, 70, 0.92);
+            border-radius: 18px;
+            box-shadow: 0 8px 40px 0 #1a298055;
+            padding: 36px 42px;
+            position: relative;
+            z-index: 1;
+            transition: box-shadow 0.3s;
+        }
+        .container:hover {
+            box-shadow: 0 12px 60px 0 #26d0ce88;
+        }
+        h1 {
+            text-align: center;
+            font-size: 3rem;
+            margin-bottom: 18px;
+            letter-spacing: 2px;
+            background: linear-gradient(90deg, #26d0ce, #1a2980, #f83600, #f9d423);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientText 3s ease-in-out infinite alternate;
+            font-weight: bold;
+            filter: drop-shadow(0 2px 16px #26d0ce88);
+        }
+        @keyframes gradientText {
+            0% {background-position: 0% 50%;}
+            100% {background-position: 100% 50%;}
+        }
+        .score {
+            background: rgba(38, 208, 206, 0.13);
+            border-radius: 12px;
+            padding: 22px 0 32px 0;
+            text-align: center;
+            margin-bottom: 32px;
+            box-shadow: 0 2px 12px #26d0ce33;
+            position: relative;
+            transition: transform 0.2s;
+        }
+        .score:hover { transform: scale(1.03);}
+        .score h2 {
+            margin-bottom: 12px;
+            color: #fff;
+            font-weight: 500;
+        }
+        .score span {
+            color: #26d0ce;
+            font-size: 2.5rem;
+            font-weight: bold;
+            text-shadow: 0 2px 12px #26d0ce55;
+        }
+        .progress-bar-bg {
+            width: 80%;
+            height: 20px;
+            background: #1a2980;
+            border-radius: 10px;
+            margin: 0 auto;
+            overflow: hidden;
+            box-shadow: 0 0 12px #26d0ce44;
+        }
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #26d0ce, #1a2980, #f83600, #f9d423);
+            background-size: 200% 200%;
+            border-radius: 10px;
+            transition: width 0.7s cubic-bezier(.4,2,.6,1);
+            animation: barAnim 2s linear infinite alternate;
+            box-shadow: 0 0 18px #26d0ce88;
+        }
+        @keyframes barAnim {
+            0% {background-position: 0% 50%;}
+            100% {background-position: 100% 50%;}
+        }
+        #chart_div {
+            width: 100%;
+            height: 320px;
+            margin: 32px 0;
+            background: #23284a;
+            border-radius: 12px;
+            box-shadow: 0 2px 16px #1a298044;
+            transition: box-shadow 0.3s, transform 0.2s;
+        }
+        #chart_div:hover {
+            box-shadow: 0 4px 32px #26d0ce55;
+            transform: scale(1.02);
+        }
+        .ai-section {
+            background: rgba(38, 208, 206, 0.13);
+            border-radius: 12px;
+            padding: 22px;
+            margin-top: 32px;
+            margin-bottom: 32px;
+            box-shadow: 0 2px 12px #26d0ce33;
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            transition: transform 0.2s;
+        }
+        .ai-section:hover { transform: scale(1.02);}
+        .ai-section .ai-icon {
+            font-size: 2.5rem;
+            color: #26d0ce;
+            animation: aiSpin 2.5s linear infinite;
+            filter: drop-shadow(0 2px 8px #26d0ce88);
+        }
+        @keyframes aiSpin {
+            0% { transform: rotate(-10deg);}
+            100% { transform: rotate(350deg);}
+        }
+        .ai-section h3 {
+            margin-top: 0;
+            font-size: 1.3rem;
+            color: #f9d423;
+            font-weight: 600;
+        }
+        .ai-prediction {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+        .ai-confidence {
+            font-size: 1rem;
+            color: #f83600;
+        }
+        .logs {
+            background: rgba(38, 208, 206, 0.13);
+            border-radius: 12px;
+            padding: 22px;
+            margin-top: 32px;
+            box-shadow: 0 2px 12px #26d0ce33;
+            transition: transform 0.2s;
+        }
+        .logs:hover { transform: scale(1.02);}
+        .logs h3 {
+            margin-top: 0;
+            font-size: 1.3rem;
+            color: #f9d423;
+        }
+        #threatLogs {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            max-height: 180px;
+            overflow-y: auto;
+        }
+        #threatLogs li {
+            background: #23284a;
+            margin-bottom: 10px;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-size: 1rem;
+            border-left: 4px solid #f83600;
+            transition: background 0.2s, border-left 0.2s, transform 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        #threatLogs li:hover {
+            background: #1a2980;
+            border-left: 4px solid #26d0ce;
+            transform: scale(1.03);
+        }
+        #threatLogs li .log-icon {
+            font-size: 1.2rem;
+            color: #f83600;
+            animation: pulse 1.5s infinite alternate;
+        }
+        #threatLogs li:last-child {
+            margin-bottom: 0;
+        }
+        #simulateBtn {
+            display: block;
+            margin: 28px auto 0 auto;
+            background: linear-gradient(90deg, #26d0ce, #f83600, #f9d423);
+            background-size: 200% 200%;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            padding: 14px 34px;
+            font-size: 1.15rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 2px 12px #f8360055;
+            transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
+            animation: btnAnim 2s linear infinite alternate;
+        }
+        #simulateBtn:hover {
+            background: linear-gradient(90deg, #f9d423, #26d0ce, #f83600);
+            background-size: 200% 200%;
+            box-shadow: 0 4px 24px #f9d42355;
+            transform: scale(1.05);
+        }
+        @keyframes btnAnim {
+            0% {background-position: 0% 50%;}
+            100% {background-position: 100% 50%;}
+        }
+        @keyframes pulse {
+            from { color: #f83600; }
+            to { color: #f9d423; }
+        }
+        @media (max-width: 600px) {
+            .container {
+                padding: 18px 6px;
+            }
+            h1 {
+                font-size: 1.5rem;
+            }
+            .ai-section {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated background bubbles -->
+    <div class="bubble bubble1"></div>
+    <div class="bubble bubble2"></div>
+    <div class="bubble bubble3"></div>
+    <div class="bubble bubble4"></div>
+    <div class="container">
+        <h1>Welcome!!!</h1>
+        <div class="score">
+            <h2>Cyber Hygiene Score: <span id="score">100</span></h2>
+            <div class="progress-bar-bg">
+                <div class="progress-bar" id="scoreBar" style="width:100%"></div>
+            </div>
+        </div>
+        <div class="ai-section">
+            <span class="ai-icon"><i class="fas fa-robot"></i></span>
+            <div>
+                <h3>AI Threat Prediction</h3>
+                <div class="ai-prediction" id="aiPrediction">Analyzing threats using AI...</div>
+                <div class="ai-confidence" id="aiConfidence"></div>
+            </div>
+        </div>
+        <div id="chart_div"></div>
+        <button id="simulateBtn"><i class="fas fa-bolt"></i> Simulate Threat</button>
+        <div class="logs">
+            <h3>Threat Detection Logs</h3>
+            <ul id="threatLogs"></ul>
+        </div>
+    </div>
+    <script>
+        // Threats data for chart
+        let threatData = [
+            ['Threat Type', 'Count'],
+            ['Malware', 3],
+            ['Phishing', 2],
+            ['Ransomware', 1],
+            ['DDoS', 1],
+            ['Other', 2]
+        ];
+
+        // Google Charts: Threats Pie Chart
+        google.charts.load('current', {'packages':['corechart']});
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+            var data = google.visualization.arrayToDataTable(threatData);
+            var options = {
+                title: 'Threats Breakdown',
+                backgroundColor: 'transparent',
+                legend: { textStyle: { color: '#f4f6fb', fontSize: 14 } },
+                titleTextStyle: { color: '#f4f6fb', fontSize: 18 },
+                pieSliceTextStyle: { color: '#181c2f' },
+                chartArea: { left: 20, top: 40, width: '90%', height: '75%' },
+                pieStartAngle: 60,
+                slices: {
+                    0: { color: '#f83600' },
+                    1: { color: '#f9d423' },
+                    2: { color: '#26d0ce' },
+                    3: { color: '#1a2980' },
+                    4: { color: '#8e24aa' }
+                },
+                animation: {
+                    startup: true,
+                    duration: 900,
+                    easing: 'out'
+                }
+            };
+            var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+            chart.draw(data, options);
+        }
+
+        // Example Threat Logs
+        let logs = [
+            { time: '2024-06-01 10:12', msg: 'Malware detected and quarantined.', type: 'Malware' },
+            { time: '2024-06-01 09:55', msg: 'Phishing attempt blocked.', type: 'Phishing' },
+            { time: '2024-06-01 09:30', msg: 'Suspicious login prevented.', type: 'Other' },
+            { time: '2024-06-01 08:50', msg: 'Ransomware signature updated.', type: 'Ransomware' },
+            { time: '2024-06-01 08:20', msg: 'DDoS attack mitigated.', type: 'DDoS' }
+        ];
+        const threatIcons = {
+            'Malware': 'fa-bug',
+            'Phishing': 'fa-fish',
+            'Ransomware': 'fa-lock',
+            'DDoS': 'fa-network-wired',
+            'Other': 'fa-exclamation-triangle'
+        };
+        function renderLogs() {
+            const threatLogs = document.getElementById('threatLogs');
+            threatLogs.innerHTML = '';
+            logs.slice(0, 8).forEach(log => {
+                const li = document.createElement('li');
+                const icon = document.createElement('span');
+                icon.className = `log-icon fas ${threatIcons[log.type] || 'fa-exclamation-triangle'}`;
+                li.appendChild(icon);
+                li.appendChild(document.createTextNode(` [${log.time}] ${log.msg}`));
+                threatLogs.appendChild(li);
+            });
+        }
+        renderLogs();
+
+        // Animate Cyber Hygiene Score
+        let score = 100;
+        function updateScore(newScore) {
+            score = newScore;
+            document.getElementById('score').textContent = score;
+            document.getElementById('scoreBar').style.width = score + '%';
+        }
+        setInterval(() => {
+            let newScore = Math.max(60, score - Math.floor(Math.random() * 2));
+            updateScore(newScore);
+        }, 5000);
+
+        // Simulated AI Threat Prediction
+        const aiPredictions = [
+            { prediction: "Potential phishing attack detected in email traffic.", confidence: 92 },
+            { prediction: "Unusual login pattern suggests possible brute-force attempt.", confidence: 88 },
+            { prediction: "No immediate threats detected. System is secure.", confidence: 97 },
+            { prediction: "Elevated ransomware risk based on recent activity.", confidence: 85 },
+            { prediction: "DDoS traffic spike observed, monitoring closely.", confidence: 90 }
+        ];
+        function updateAIPrediction() {
+            const idx = Math.floor(Math.random() * aiPredictions.length);
+            document.getElementById('aiPrediction').textContent = aiPredictions[idx].prediction;
+            document.getElementById('aiConfidence').textContent = `AI Confidence: ${aiPredictions[idx].confidence}%`;
+        }
+        updateAIPrediction();
+        setInterval(updateAIPrediction, 7000);
+
+        // Simulate Threat Button
+        document.getElementById('simulateBtn').addEventListener('click', function() {
+            // Random threat
+            const threatTypes = ['Malware', 'Phishing', 'Ransomware', 'DDoS', 'Other'];
+            const threatMsgs = {
+                'Malware': 'New malware detected and isolated.',
+                'Phishing': 'Phishing URL blocked in real-time.',
+                'Ransomware': 'Ransomware activity detected and stopped.',
+                'DDoS': 'DDoS attack traffic mitigated.',
+                'Other': 'Suspicious activity flagged for review.'
+            };
+            const tIdx = Math.floor(Math.random() * threatTypes.length);
+            const type = threatTypes[tIdx];
+            const now = new Date();
+            const timeStr = now.getFullYear() + '-' +
+                String(now.getMonth()+1).padStart(2,'0') + '-' +
+                String(now.getDate()).padStart(2,'0') + ' ' +
+                String(now.getHours()).padStart(2,'0') + ':' +
+                String(now.getMinutes()).padStart(2,'0');
+            logs.unshift({ time: timeStr, msg: threatMsgs[type], type });
+            if (logs.length > 12) logs.pop();
+
+            // Update chart data
+            let found = false;
+            for (let i = 1; i < threatData.length; i++) {
+                if (threatData[i][0] === type) {
+                    threatData[i][1]++;
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) threatData.push([type, 1]);
+            drawChart();
+            renderLogs();
+
+            // Lower score a bit
+            updateScore(Math.max(60, score - Math.floor(Math.random() * 4 + 2)));
+        });
+    </script>
+</body>
+</html>
